@@ -1,0 +1,80 @@
+import java.util.Scanner;
+
+class ParkingSystem {
+    private boolean[] parkingSlots;
+
+    public ParkingSystem(int totalSlots) {
+        parkingSlots = new boolean[totalSlots];
+        // Initialize all parking slots as available (true)
+        for (int i = 0; i < totalSlots; i++) {
+            parkingSlots[i] = true;
+        }
+    }
+
+    public int parkVehicle() {
+        for (int i = 0; i < parkingSlots.length; i++) {
+            if (parkingSlots[i]) {
+                parkingSlots[i] = false; // Mark the slot as occupied
+                return i + 1; // Return the slot number (adding 1 for user-friendly display)
+            }
+        }
+        return -1; // Return -1 if no available slot is found
+    }
+
+    public boolean retrieveVehicle(int slotNumber) {
+        if (slotNumber >= 1 && slotNumber <= parkingSlots.length && !parkingSlots[slotNumber - 1]) {
+            parkingSlots[slotNumber - 1] = true; // Mark the slot as available
+            return true; // Vehicle retrieved successfully
+        } else {
+            return false; // Invalid slot number or slot already empty
+        }
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter the total number of parking slots: ");
+        int totalSlots = scanner.nextInt();
+
+        ParkingSystem parkingSystem = new ParkingSystem(totalSlots);
+
+        while (true) {
+            System.out.println("1. Park a vehicle");
+            System.out.println("2. Retrieve a vehicle");
+            System.out.println("3. Exit");
+
+            System.out.print("Enter your choice: ");
+            int choice = scanner.nextInt();
+
+            switch (choice) {
+                case 1:
+                    int parkedSlot = parkingSystem.parkVehicle();
+                    if (parkedSlot != -1) {
+                        System.out.println("Vehicle parked at slot " + parkedSlot);
+                    } else {
+                        System.out.println("Sorry, no available parking slots.");
+                    }
+                    break;
+
+                case 2:
+                    System.out.print("Enter the slot number to retrieve the vehicle: ");
+                    int slotNumber = scanner.nextInt();
+                    if (parkingSystem.retrieveVehicle(slotNumber)) {
+                        System.out.println("Vehicle retrieved from slot " + slotNumber);
+                    } else {
+                        System.out.println("Invalid slot number or slot already empty.");
+                    }
+                    break;
+
+                case 3:
+                    System.out.println("Exiting the parking system application.");
+                    System.exit(0);
+
+                default:
+                    System.out.println("Invalid choice. Please enter a valid option.");
+            }
+        }
+    }
+}
